@@ -1,20 +1,30 @@
 # Datacenter Workload Forecasting with LSTM
 
-This component implements the **LSTM neural network** for predicting future CPU and memory utilization in data center servers.
+Predicting server CPU workload using Deep Learning to enable proactive energy-efficient cooling in datacenters.
 
-## 🎯 Objective
-Accurately forecast server workload spikes (5 to 10 minutes ahead) based on historical time-series traces. This enables proactive cooling adjustments to prevent server overheating while saving energy.
+## 📊 Dataset Used
+* **Source:** [Cloud Workload Job Traces for Resource Forecasting (Kaggle - zoya77)](https://www.kaggle.com/datasets/zoya77/cloud-workload-job-traces-for-resource-forecasting)
+* **File:** `cloud_workload_dataset.csv`
+* **Features:**
+  * `Requested_CPUs` & `Used_CPUs`
+  * `Requested_Memory(MB)` & `Used_Memory(MB)`
+  * `Execution_Time(Seconds)` & `Queue_Wait_Time(Seconds)`
 
 ## 🧠 Model Architecture
-* **Input**: Sliding window of past 30 timesteps with 2 features (`CPU Usage %`, `Memory Usage %`).
-* **LSTM Layer 1**: 64 units with Dropout (0.2).
-* **LSTM Layer 2**: 32 units with Dropout (0.2).
-* **Dense Layer**: 16 units (ReLU activation).
-* **Output Layer**: 1 unit predicting the next CPU workload point.
-* **Loss Function**: Mean Squared Error (MSE), Adam optimizer.
+* **Input Layer:** `Input(shape=(30, n_features))` — 30-timestep sliding window.
+* **LSTM Layer 1:** 64 units + Dropout (0.2).
+* **LSTM Layer 2:** 32 units + Dropout (0.2).
+* **Dense Layer:** 16 units (ReLU).
+* **Output Layer:** 1 unit (Next CPU utilization forecast).
+* **Optimizer & Loss:** Adam, Mean Squared Error (MSE).
 
-## 🚀 How to Run
+## 📈 Performance Results
+* **Training samples:** 2,825 windows
+* **Final Validation Loss:** `0.0415`
+* **Test RMSE:** `0.2038` (Normalized scale)
+
+## 🚀 Execution
 ```bash
 python lstm_model.py
 ```
-*(The script automatically detects Kaggle CSV datasets or generates a benchmark workload trace if no file is found).*
+Outputs prediction metrics and saves `prediction_curve.png` showing the actual vs. predicted workload.

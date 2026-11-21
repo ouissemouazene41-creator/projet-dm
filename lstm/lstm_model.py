@@ -1,33 +1,43 @@
 """
 LSTM Model: Datacenter Server Workload (CPU) Forecasting
 ---------------------------------------------------------
-This model forecasts future CPU utilization from historical workload traces
-to enable proactive cooling in datacenter server rooms.
+Dataset: Cloud Workload Job Traces for Resource Forecasting (zoya77)
+Features: ['Requested_CPUs', 'Used_CPUs', 'Requested_Memory(MB)', 'Used_Memory(MB)']
 """
 
 import os
 import glob
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import LSTM, Dense, Dropout
+from tensorflow.keras.layers import LSTM, Dense, Dropout, Input
 
 # ── 1. LOAD DATA ──────────────────────────────────────────────
-def load_data():
-    """Searches for Kaggle dataset CSV or generates synthetic traces."""
-    csv_files = glob.glob('/kaggle/input/**/*.csv', recursive=True) or glob.glob('*.csv')
+def load_dataset():
+    # Exact Kaggle path from your session
+    kaggle_path = '/kaggle/input/datasets/zoya77/cloud-workload-job-traces-for-resource-forecasting/cloud_workload_dataset.csv'
     
-    if csv_files:
-        print(f"📂 Loading dataset from: {csv_files[0]}")
-        df = pd.read_csv(csv_files[0], nrows=50000)
-        numeric_cols = df.select_dtypes(include=[np.number]).columns.tolist()
-        data = df[numeric_cols[:2]].dropna().values
+    if os.path.exists(kaggle_path):
+        csv_file = kaggle_path
     else:
-        print("⚙️ Generating synthetic CPU workload trace...")
+        # Fallback search
+        found = glob.glob('/kaggle/input/**/cloud_workload_dataset.csv', recursive=True) or glob.glob('*.csv')
+        csv_file = found[0] if found else None
+
+    if csv_file:
+        print(f"📂 Loading: {csv_file}")
+        df = pd.read_csv(csv_file)
+        # Select key workload features
+        features = ['Requested_CPUs', 'Used_CPUs', 'Requested_Memory(MB)', 'Used_Memory(MB)']
+        available = [c for c in features if c in df.columns]
+        data = df[available].dropna().values
+    else:
+        print("⚙️ Fallback: Generating benchmark workload traces...")
         np.random.seed(42)
         t = np.linspace(0, 48 * np.pi, 3000)
-        base = 45 + 25 * np.sin(t / 6) + 10 * np.cos(t / 2)
+        base = 45 + 25 * np.sin(t / 6)
         noise = np.random.normal(0, 4, 3000)
         spikes = (np.random.rand(3000) > 0.94) * np.random.uniform(10, 25, 3000)
         cpu = np.clip(base + noise + spikes, 10, 100)
@@ -44,16 +54,17 @@ def prepare_windows(data, window_size=30):
     X, y = [], []
     for i in range(len(scaled_data) - window_size):
         X.append(scaled_data[i:i + window_size])
-        y.append(scaled_data[i + window_size, 0])  # Target: next CPU %
+        y.append(scaled_data[i + window_size, 1])  # Target: next Used_CPUs
         
     X, y = np.array(X), np.array(y)
     split = int(0.8 * len(X))
     return X[:split], X[split:], y[:split], y[split:], scaler
 
 # ── 3. BUILD & TRAIN LSTM ─────────────────────────────────────
-def train_lstm(X_train, y_train, X_test, y_test, window_size=30, n_features=2):
+def train_model(X_train, y_train, X_test, y_test, window_size=30, n_features=2):
     model = Sequential([
-        LSTM(64, return_sequences=True, input_shape=(window_size, n_features)),
+        Input(shape=(window_size, n_features)),
+        LSTM(64, return_sequences=True),
         Dropout(0.2),
         LSTM(32),
         Dropout(0.2),
@@ -62,19 +73,31 @@ def train_lstm(X_train, y_train, X_test, y_test, window_size=30, n_features=2):
     ])
     
     model.compile(optimizer='adam', loss='mse')
-    print("🚀 Training LSTM model...")
-    model.fit(X_train, y_train, epochs=8, batch_size=32, validation_data=(X_test, y_test), verbose=1)
+    print(f"🚀 Training LSTM on {len(X_train)} samples...")
+    model.fit(X_train, y_train, epochs=5, batch_size=64, validation_data=(X_test, y_test), verbose=1)
     return model
 
-# ── 4. EVALUATION ─────────────────────────────────────────────
-def evaluate(model, X_test, y_test):
-    predictions = model.predict(X_test).flatten()
-    rmse = np.sqrt(np.mean((predictions - y_test) ** 2))
-    print(f"\n🎉 Test RMSE: {rmse:.4f} (Normalized Scale)")
-    return predictions
+# ── 4. EVALUATION & VISUALIZATION ─────────────────────────────
+def evaluate_and_plot(model, X_test, y_test):
+    pred = model.predict(X_test).flatten()
+    rmse = np.sqrt(np.mean((pred - y_test) ** 2))
+    print(f"\n🎉 SUCCESS! LSTM Trained. Test RMSE: {rmse:.4f}")
+    
+    # Plot first 100 timesteps
+    plt.figure(figsize=(10, 4))
+    plt.plot(y_test[:100], label='Actual Real CPU', color='blue', alpha=0.7)
+    plt.plot(pred[:100], label='LSTM Predicted CPU', color='red', linestyle='--')
+    plt.title('LSTM CPU Workload Prediction (First 100 timesteps)')
+    plt.xlabel('Time (steps)')
+    plt.ylabel('Normalized CPU Usage')
+    plt.legend()
+    plt.grid(True)
+    plt.savefig('prediction_curve.png')
+    plt.show()
+    return pred
 
 if __name__ == "__main__":
-    data = load_data()
-    X_train, X_test, y_train, y_test, scaler = prepare_windows(data)
-    model = train_lstm(X_train, y_train, X_test, y_test, window_size=30, n_features=X_train.shape[2])
-    evaluate(model, X_test, y_test)
+    data = load_dataset()
+    X_train, X_test, y_train, y_test, scaler = prepare_windows(data, window_size=30)
+    model = train_model(X_train, y_train, X_test, y_test, window_size=30, n_features=X_train.shape[2])
+    evaluate_and_plot(model, X_test, y_test)
