@@ -1,0 +1,11 @@
+{
+    "model": "opt_plateau_wd2e3",
+    "test_accuracy": 0.915,
+    "roc_auc_per_class": {
+        "Optimal / Froid (<22°C)": 0.998385,
+        "Nominal ASHRAE (22-27°C)": 0.980252,
+        "Alerte Point Chaud (27-32°C)": 0.972681,
+        "Surchauffe Critique (>32°C)": 0.996474
+    },
+    "macro_roc_auc": 0.987806
+}
