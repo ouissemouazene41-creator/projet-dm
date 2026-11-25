@@ -1,0 +1,19 @@
+# Dépendances — Projet 19 : Efficacité Énergétique des Datacenters (CNN 2D)
+
+# Deep Learning — CNN convolutif 2D (PyTorch)
+torch>=2.0.0
+
+# Manipulation de données et matrices numériques
+numpy>=1.22.0
+pandas>=1.4.0
+
+# Métriques d'évaluation sklearn
+scikit-learn>=1.1.0
+
+# Visualisation des cartes thermiques et courbes d'entraînement
+matplotlib>=3.5.0
+seaborn>=0.12.0
+
+# Optionnel (non requis pour le pipeline standard) :
+# torchvision>=0.15.0  # Non requis : CNN natif Conv2D sans torchvision
+# kaggle>=1.5.12       # Requis uniquement pour le téléchargement Kaggle CLI

@@ -1,0 +1,83 @@
+{
+    "model_name": "opt_plateau_wd2e3",
+    "num_parameters": 72612,
+    "best_epoch": 27,
+    "train_samples": 2400,
+    "val_samples": 600,
+    "test_samples": 600,
+    "train_loss": 0.13508334455390772,
+    "val_loss": 0.2029434315363566,
+    "test_loss": 0.23456957896550495,
+    "train_accuracy": 0.9529166666666666,
+    "val_accuracy": 0.9166666666666666,
+    "test_accuracy": 0.915,
+    "macro_precision": 0.9180809484413361,
+    "macro_recall": 0.915,
+    "macro_f1_score": 0.9141723544462366,
+    "weighted_f1_score": 0.9141723544462366,
+    "classification_report": {
+        "Optimal / Froid (<22\u00b0C)": {
+            "precision": 0.972972972972973,
+            "recall": 0.96,
+            "f1-score": 0.9664429530201343,
+            "support": 150.0
+        },
+        "Nominal ASHRAE (22-27\u00b0C)": {
+            "precision": 0.834319526627219,
+            "recall": 0.94,
+            "f1-score": 0.8840125391849529,
+            "support": 150.0
+        },
+        "Alerte Point Chaud (27-32\u00b0C)": {
+            "precision": 0.9291338582677166,
+            "recall": 0.7866666666666666,
+            "f1-score": 0.851985559566787,
+            "support": 150.0
+        },
+        "Surchauffe Critique (>32\u00b0C)": {
+            "precision": 0.9358974358974359,
+            "recall": 0.9733333333333334,
+            "f1-score": 0.954248366013072,
+            "support": 150.0
+        },
+        "accuracy": 0.915,
+        "macro avg": {
+            "precision": 0.9180809484413361,
+            "recall": 0.915,
+            "f1-score": 0.9141723544462366,
+            "support": 600.0
+        },
+        "weighted avg": {
+            "precision": 0.918080948441336,
+            "recall": 0.915,
+            "f1-score": 0.9141723544462366,
+            "support": 600.0
+        }
+    },
+    "confusion_matrix": [
+        [
+            144,
+            6,
+            0,
+            0
+        ],
+        [
+            4,
+            141,
+            5,
+            0
+        ],
+        [
+            0,
+            22,
+            118,
+            10
+        ],
+        [
+            0,
+            0,
+            4,
+            146
+        ]
+    ]
+}

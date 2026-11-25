@@ -1,0 +1,56 @@
+# Projet 19 : Efficacité Énergétique des Datacenters
+# .gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Environnements virtuels
+venv/
+env/
+.env/
+.venv/
+.conda/
+
+# Variables d'environnement et secrets
+.env
+.env.*
+*.key
+*.pem
+*.secret
+secrets.json
+credentials.json
+
+# Éditeurs et IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Logs
+*.log
+logs/
+
+# Fichiers temporaires
+*.tmp
+*.bak
+
+# NOTE : Les fichiers suivants sont INCLUS dans le dépôt (projet scientifique) :
+# - dataset/            (cartes thermiques NPZ, métadonnées CSV)
+# - models/saved_model/ (poids du CNN entraîné PTH)
+# - results/            (graphiques, matrice de confusion, courbes)

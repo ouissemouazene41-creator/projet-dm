@@ -1,0 +1,25 @@
+========================================================================
+RAPPORT D'ÉVALUATION — CNN OPTIMISÉ (TEST SET STRICTEMENT INDÉPENDANT)
+========================================================================
+
+Modèle            : opt_plateau_wd2e3 (72,612 params)
+Train Loss / Acc  : 0.1351 / 95.29%
+Val   Loss / Acc  : 0.2029 / 91.67%
+Test  Loss / Acc  : 0.2346 / 91.50%
+Macro Precision   : 91.81%
+Macro Recall      : 91.50%
+Macro F1-Score    : 91.42%
+Weighted F1-Score : 91.42%
+
+Détail par classe :
+                              precision    recall  f1-score   support
+
+     Optimal / Froid (<22°C)     0.9730    0.9600    0.9664       150
+    Nominal ASHRAE (22-27°C)     0.8343    0.9400    0.8840       150
+Alerte Point Chaud (27-32°C)     0.9291    0.7867    0.8520       150
+ Surchauffe Critique (>32°C)     0.9359    0.9733    0.9542       150
+
+                    accuracy                         0.9150       600
+                   macro avg     0.9181    0.9150    0.9142       600
+                weighted avg     0.9181    0.9150    0.9142       600
+

@@ -1,0 +1,22 @@
+======================================================================
+RAPPORT D'ÉVALUATION DU MODÈLE CNN — TEST SET INÉDIT
+======================================================================
+
+Test Accuracy     : 100.00%
+Macro Precision   : 100.00%
+Macro Recall      : 100.00%
+Macro F1-Score    : 100.00%
+Weighted F1-Score : 100.00%
+
+Détail par classe :
+                              precision    recall  f1-score   support
+
+     Optimal / Froid (<22°C)     1.0000    1.0000    1.0000       113
+    Nominal ASHRAE (22-27°C)     1.0000    1.0000    1.0000       112
+Alerte Point Chaud (27-32°C)     1.0000    1.0000    1.0000       113
+ Surchauffe Critique (>32°C)     1.0000    1.0000    1.0000       112
+
+                    accuracy                         1.0000       450
+                   macro avg     1.0000    1.0000    1.0000       450
+                weighted avg     1.0000    1.0000    1.0000       450
+
