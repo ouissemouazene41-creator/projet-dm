@@ -9,8 +9,9 @@ Predicting server CPU workload using Deep Learning to enable proactive energy-ef
 ## Results
 
 ### LSTM 1 — Jobs Dataset (`lstm_job.py`)
-* **Test RMSE:** `0.2038`
-* **Validation Loss:** `0.0415`
+* **Test RMSE:** `0.0811`
+* **Test MAE:** `0.0534`
+* **Validation Loss:** `0.0066` (`val_mae: 0.0534`)
 
 ![LSTM 1 Jobs Prediction](lstm1_jobs.png)
 
